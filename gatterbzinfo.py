@@ -92,16 +92,16 @@ for filename in os.listdir(ODFs_path):
         tempOrdi = {}
         tempGuns = {}
 
-        # Addition of the elements to the auxiliar dictionaries
+        # Addition of the element_names to the auxiliar dictionaries
 
-        for element in vehicleCharacteristics:
-            tempVeh[element] = ''
+        for element_name in vehicleCharacteristics:
+            tempVeh[element_name] = ''
 
-        for element in ordinancesCharacteristics:
-            tempOrdi[element] = ''  
+        for element_name in ordinancesCharacteristics:
+            tempOrdi[element_name] = ''  
 
-        for element in ordinancesCharacteristics:
-            tempOrdi[element] = '' 
+        for element_name in ordinancesCharacteristics:
+            tempOrdi[element_name] = '' 
 
         # Scanning through each line of the file
 
@@ -115,44 +115,45 @@ for filename in os.listdir(ODFs_path):
 
                 # Splits each line to a list, based on spaces, so if the line is, for example, ammocost = 1 the list will be ['ammo', '=', 'cost']
                 lineSplited = line.split()
-                element = lineSplited[0]
+                element_name = lineSplited[0]
+                element_data = ' '.join(map(str, lineSplited[2:]))
 
 
-                # If the first element on the list is one of the ordinance characteristics I want to get
-                # this becomes True so I add the third element on the list to the auxiliar ordinance dictionary
-                # I also turn the boolean variable to True to add this dictionary element to the main dictionary later
+                # If the first element_name on the list is one of the ordinance characteristics I want to get
+                # this becomes True so I add the third element_name on the list to the auxiliar ordinance dictionary
+                # I also turn the boolean variable to True to add this dictionary element_name to the main dictionary later
                 # All of the next 'if' statements are equivalent to this one
-                if element in ordinancesCharacteristics:
-                    tempOrdi[element] = lineSplited[2]
+                if element_name in ordinancesCharacteristics:
+                    tempOrdi[element_name] = element_data
                     isOrdinance = True
                     boolean = True
                 
-                if element in gunsCharacteristics:
-                    tempGuns[element] = lineSplited[2]
+                if element_name in gunsCharacteristics:
+                    tempGuns[element_name] = element_data
                     isGun = True
                     boolean = True
 
                 if isVehicle and len(vehicleCharacteristics)==1:
                     try:
-                        lineSplited[2] = float(lineSplited[2])
+                        element_data = float(element_data)
                     except:
                         None
-                    tempVeh[element] = lineSplited[2]
+                    tempVeh[element_name] = element_data
                     boolean = True
 
-                elif isVehicle and element in vehicleCharacteristics:
+                elif isVehicle and element_name in vehicleCharacteristics:
                     try:
-                        lineSplited[2] = float(lineSplited[2])
+                        element_data = float(element_data)
                     except:
                         None
-                    tempVeh[element] = lineSplited[2]
+                    tempVeh[element_name] = element_data
                     boolean = True
 
 
             except:
                 None
         
-        # If the boolean is true the dictionary element will be added to the main dictionary
+        # If the boolean is true the dictionary element_name will be added to the main dictionary
         if boolean:
             if isOrdinance:
                 ordinances[filename] = tempOrdi
