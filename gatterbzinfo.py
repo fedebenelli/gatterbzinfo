@@ -16,12 +16,14 @@
 
 import os
 import json
-import pandas as pd
+try:
+    import pandas as pd
+    has_pandas = True
+except:
+    has_pandas = False
 
 ordinances = {}
-
 guns = {}
-
 vehicles = {}
 
 # List of guns characteristics to gatter
@@ -65,11 +67,14 @@ vehicleCharacteristics = [
     'unitName'
 ]
 
-for filename in os.listdir('./Files'):
+# gets the working directory
+ODFs_path = os.getcwd()+'/ODFs/'
+
+for filename in os.listdir(ODFs_path):
     print('Looking through: ',filename)
     # Looks through the files on the ./Files folder
 
-    with open(f'./Files/{filename}') as f:
+    with open(ODFs_path+filename) as f:
 
         # Opens the file on readmode and makes auxiliar variables
         # boolean variable is redefined as True in the case the case it passed through some  of the possible type of ODF to analyze, so after the data is added to the corresponding diccionary
@@ -171,18 +176,20 @@ with open('ordinances.json', 'w') as w:
 
 
 # Transforms the dictionaries to pandas DataFrames and saves them to Excel Files
-print('Saving xlsx files')
 
-df = pd.DataFrame(data=guns)
-df = (df.T)
-df.to_excel('weapons.xlsx')
+if has_pandas:
+    print('Saving xlsx files')
 
-df = pd.DataFrame(data=ordinances)
-df = (df.T)
-df.to_excel('ordinances.xlsx')
+    df = pd.DataFrame(data=guns)
+    df = (df.T)
+    df.to_excel('weapons.xlsx')
 
-df = pd.DataFrame(data=vehicles)
-df = (df.T)
-df.to_excel('vehicles.xlsx')
+    df = pd.DataFrame(data=ordinances)
+    df = (df.T)
+    df.to_excel('ordinances.xlsx')
+
+    df = pd.DataFrame(data=vehicles)
+    df = (df.T)
+    df.to_excel('vehicles.xlsx')
 
 print('Done!')
